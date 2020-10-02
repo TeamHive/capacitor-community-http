@@ -492,12 +492,12 @@ public class Http extends Plugin {
           JSObject jsonValue = new JSObject(builder.toString());
           ret.put("data", jsonValue);
         } catch (JSONException e) {
-            try {
-              JSArray jsonValue = new JSArray(builder.toString());
-              ret.put("data", jsonValue);
-            } catch (JSONException e2) {
-              ret.put("data", builder.toString());
-            }
+          try {
+            JSArray jsonValue = new JSArray(builder.toString());
+            ret.put("data", jsonValue);
+          } catch (JSONException e2) {
+            ret.put("data", builder.toString());
+          }
         }
       } else {
         ret.put("data", builder.toString());
@@ -506,10 +506,10 @@ public class Http extends Plugin {
       ret.put("data", builder.toString());
     }
 
-    if(errorStream != null){
-       ret.put("error", true);
+    if (errorStream != null) {
+      ret.put("error", true);
     }
-    
+
     call.resolve(ret);
   }
 
@@ -581,12 +581,12 @@ public class Http extends Plugin {
       if (contentType.contains("application/json")) {
         DataOutputStream os = new DataOutputStream(conn.getOutputStream());
         String content = null;
-        
+
         JSObject jsObject = call.getObject("data", null);
         if (jsObject != null) {
           content = jsObject.toString();
-        } 
-        
+        }
+
         if (content == null) {
           JSArray jsArray = call.getArray("data", null);
           if (jsArray != null) {
@@ -598,7 +598,10 @@ public class Http extends Plugin {
           content = call.getString("data");
         }
 
-        os.writeBytes(content);
+        if (content != null) {
+          os.writeBytes(content);
+        }
+
         os.flush();
         os.close();
       } else if (contentType.contains("application/x-www-form-urlencoded")) {
